@@ -1,0 +1,1 @@
+ALTER TABLE `transactions` ADD `deleteted` integer DEFAULT 0 NOT NULL;
