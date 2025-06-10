@@ -2,6 +2,7 @@ import { Transaction } from "@/domain/entities/Transaction";
 import useFormattedCurrency from "@/hooks/useFormattedCurrency";
 import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 import useFormattedDate from "@/hooks/useFormattedDate";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 type Props = {
   transaction: Transaction;
@@ -10,6 +11,7 @@ type Props = {
 
 export default function TransactionItem({ transaction, onPress }: Props) {
   const formattedAmount = useFormattedCurrency(transaction.amount);
+  const formattedTotal = useFormattedCurrency(transaction.total);
   const formattedDate = useFormattedDate(transaction.date, 'datetime');
 
   return (
@@ -19,12 +21,21 @@ export default function TransactionItem({ transaction, onPress }: Props) {
       style={styles.transactionContainer}
     >
       <View>
-        <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-          {transaction.description}
-        </Text>
-        <Text style={{ color: transaction.isWithdrawal ? "red" : "green" }}>
-          {transaction.isWithdrawal ? "-" : "+"}{formattedAmount}
-        </Text>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Text style={{ fontSize: 16, flex: 1, fontWeight: "bold" }}>
+            {transaction.description}
+          </Text>
+          <MaterialIcons name={transaction.concept.icon} size={16} />
+          <MaterialIcons name={transaction.origin.icon} size={16} />
+        </View>
+        <View style={{ flexDirection: "row", alignItems: "center"}}>
+          <Text style={{ color: transaction.isWithdrawal ? "red" : "green", flex: 1 }}>
+            {transaction.isWithdrawal ? "-" : "+"}{formattedAmount}
+          </Text>
+          <Text style={{ color: "gray", fontSize: 12 }}>
+            {formattedTotal}
+          </Text>
+        </View>
         <Text style={{ color: "gray" }}>
           {formattedDate}
         </Text>
