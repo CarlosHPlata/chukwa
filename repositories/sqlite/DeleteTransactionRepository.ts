@@ -14,7 +14,7 @@ export const deleteTransactionRepository: DeleteTransactionRepositoryFactory =
       if (isNaN(transactionIdNumber)) {
         throw new Error("Invalid transaction ID");
       }
-      const drizzleDb = drizzle(db);
+      const drizzleDb = drizzle(db, { schema });
       await drizzleDb
         .update(schema.transactions)
         .set({ deleted: 1 })
