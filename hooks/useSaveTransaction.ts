@@ -12,7 +12,7 @@ export default function useSaveTransaction(): AsyncAction & {
   ) => void;
 } {
   const db = useSQLiteContext();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | undefined>();
 
   const callback = useCallback(

@@ -117,7 +117,7 @@ const queryTransactions = async (db: SQLiteDatabase, activeMonthId: number) => {
       where: (transactions, { and, eq, ne }) =>
         and(
           eq(transactions.activeMonthId, activeMonthId),
-          ne(transactions.deleteted, 1),
+          ne(transactions.deleted, 1),
         ),
       orderBy: (transactions, { desc }) => desc(transactions.date),
       with: {
