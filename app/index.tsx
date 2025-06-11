@@ -20,6 +20,7 @@ export default function Index() {
         style={{
           flex: 1,
           flexDirection: "column",
+          marginTop: 50,
         }}
       >
         <View

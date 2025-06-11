@@ -21,8 +21,9 @@ export default function TransactionView() {
           padding: 24,
           backgroundColor: "#fff",
           borderRadius: 12,
-          margin: 16,
+          marginHorizontal: 16,
           elevation: 2,
+          marginTop: 50,
         }}
       >
         <Text style={{ fontSize: 22, fontWeight: "bold", marginBottom: 12 }}>

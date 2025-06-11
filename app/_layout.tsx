@@ -19,7 +19,11 @@ export default function RootLayout() {
         options={{ enableChangeListener: true }}
         useSuspense
       >
-        <Stack />
+        <Stack>
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="transaction/add" options={{ headerTitle: "Add New"}}/>
+          <Stack.Screen name="transaction/[id]" options={{ headerTitle: "Transaction"}} />
+        </Stack>
       </SQLiteProvider>
     </Suspense>
   );
