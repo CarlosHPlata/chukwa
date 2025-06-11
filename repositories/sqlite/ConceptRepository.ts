@@ -9,7 +9,7 @@ type GetConceptsFactory = (db: SQLiteDatabase) => GetConcepts;
 export const getConcepts: GetConceptsFactory = (db) => async () => {
   const drizzleDb = drizzle(db, { schema });
   const conceptsDb = await drizzleDb.query.concepts.findMany({
-    where: (concepts, { ne }) => ne(concepts.deleteted, 1),
+    where: (concepts, { ne }) => ne(concepts.deleted, 1),
   });
 
   if (!conceptsDb || conceptsDb.length === 0) {

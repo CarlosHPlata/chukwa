@@ -11,14 +11,14 @@ export const concepts = sqliteTable("concepts", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
   icon: text("icon").notNull(),
-  deleteted: integer("deleteted").default(0).notNull(),
+  deleted: integer("deleted").default(0).notNull(),
 });
 
 export const origins = sqliteTable("origins", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
   icon: text("icon").notNull(),
-  deleteted: integer("deleteted").default(0).notNull(),
+  deleted: integer("deleted").default(0).notNull(),
 });
 
 export const activeMonths = sqliteTable("totals", {
@@ -47,7 +47,7 @@ export const transactions = sqliteTable(
     destinationId: integer("destination_id")
       .notNull()
       .references(() => origins.id, { onDelete: "cascade" }),
-    deleteted: integer("deleteted").default(0).notNull(),
+    deleted: integer("deleted").default(0).notNull(),
   },
   (table) => [
     index("transactions_active_month_id_index").on(table.activeMonthId),

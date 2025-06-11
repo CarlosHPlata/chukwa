@@ -12,3 +12,5 @@ export type CreateTransaction = (
   transaction: Omit<Transaction, "id">,
   activeMonthId: number,
 ) => Promise<void>;
+
+export type DeleteTransaction = (id: string) => Promise<void>;

@@ -9,7 +9,7 @@ type OriginRepositoryFactory = (db: SQLiteDatabase) => GetOrigins;
 export const getOrigins: OriginRepositoryFactory = (db) => async () => {
   const drizzleDb = drizzle(db, { schema });
   const originsDb = await drizzleDb.query.origins.findMany({
-    where: (origins, { ne }) => ne(origins.deleteted, 1),
+    where: (origins, { ne }) => ne(origins.deleted, 1),
   });
 
   if (!originsDb || originsDb.length === 0) {
