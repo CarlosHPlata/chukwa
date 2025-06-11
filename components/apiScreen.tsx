@@ -18,7 +18,7 @@ export default function ApiScreen({ isLoading, error, children }: Props) {
 
   if (error) {
     console.error("Error in ApiScreen:", error);
-    return <Error error={""} />;
+    return <Error error={error} />;
   }
 
   return children;
