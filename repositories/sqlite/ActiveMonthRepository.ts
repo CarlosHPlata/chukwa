@@ -3,7 +3,7 @@ import { SAVE_DATE_FORMAT } from "@/domain/constants";
 import { GetActiveMonth } from "@/domain/repositories/activeRepository";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { SQLiteDatabase } from "expo-sqlite";
-import moment from "moment";
+import { DateTime } from "luxon";
 
 type GetActiveMonthFactory = (db: SQLiteDatabase) => GetActiveMonth;
 export const getActiveMonth: GetActiveMonthFactory = (db) => async () => {
@@ -16,7 +16,7 @@ export const getActiveMonth: GetActiveMonthFactory = (db) => async () => {
     if (!result) {
       const firstMonth = {
         total: 0,
-        startDate: moment(new Date()).format(SAVE_DATE_FORMAT),
+        startDate: DateTime.fromJSDate(new Date()).toFormat(SAVE_DATE_FORMAT),
       };
       let inserted = await drizzleDb
         .insert(schema.activeMonths)
