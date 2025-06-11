@@ -21,7 +21,6 @@
     "@react-navigation/elements": "^2.3.8",
     "@react-navigation/native": "^7.1.6",
     "babel-plugin-inline-import": "^3.0.0",
-    "builder-pattern": "^2.2.0",
     "drizzle-orm": "^0.44.1",
     "expo": "53.0.11",
     "expo-blur": "~14.1.5",
