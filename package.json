@@ -26,8 +26,6 @@
     "expo-blur": "~14.1.5",
     "expo-checkbox": "~4.1.4",
     "expo-constants": "~17.1.6",
-    "expo-dev-client": "~5.2.0",
-    "expo-drizzle-studio-plugin": "^0.1.2",
     "expo-font": "~13.3.1",
     "expo-haptics": "~14.1.4",
     "expo-image": "~2.3.0",
@@ -35,7 +33,6 @@
     "expo-router": "~5.1.0",
     "expo-splash-screen": "~0.30.9",
     "expo-sqlite": "~15.2.12",
-    "expo-sqlite-devtools": "^0.0.2",
     "expo-status-bar": "~2.2.3",
     "expo-symbols": "~0.4.5",
     "expo-system-ui": "~5.0.8",
@@ -67,7 +64,9 @@
     "doctor": {
       "reactNativeDirectoryCheck": {
         "enabled": true,
-        "exclude": ["luxon"]
+        "exclude": [
+          "luxon"
+        ]
       }
     }
   },
