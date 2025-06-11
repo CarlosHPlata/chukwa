@@ -1,17 +1,17 @@
 import { VIEW_DATE_FORMAT, VIEW_DATETIME_FORMAT } from "@/domain/constants";
-import moment from "moment";
+import { DateTime } from "luxon";
 
-type DateType = "date" | "datetime";
+export type DateType = "date" | "datetime" | "time" | "countdown";
 export default function useFormattedDate(
   date: Date,
   type: DateType,
 ): string {
   switch (type) {
     case "date":
-      return moment(date).format(VIEW_DATE_FORMAT);
+      return DateTime.fromJSDate(date).toFormat(VIEW_DATE_FORMAT);
     case "datetime":
-      return moment(date).format(VIEW_DATETIME_FORMAT);
+      return DateTime.fromJSDate(date).toFormat(VIEW_DATETIME_FORMAT);
     default:
-      return moment(date).format(VIEW_DATETIME_FORMAT);
+      return DateTime.fromJSDate(date).toFormat(VIEW_DATETIME_FORMAT);
   }
 }

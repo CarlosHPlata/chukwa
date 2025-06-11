@@ -127,7 +127,7 @@ export default function Add() {
           keyboardType="decimal-pad"
           value={amountText}
           onChangeText={(text) => {
-            setAmountText(text)
+            setAmountText(text);
             dispatch({ type: "SET_AMOUNT", payload: text });
           }}
         />
@@ -174,7 +174,6 @@ export default function Add() {
             dispatch({ type: "SET_DATE", payload: date })
           }
           mode="date"
-          format="DD/MM/YYYY"
         />
         <ThemedCheckbox
           label="Withdrawal"
