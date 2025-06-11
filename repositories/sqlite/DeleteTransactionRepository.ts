@@ -10,7 +10,7 @@ type DeleteTransactionRepositoryFactory = (
 export const deleteTransactionRepository: DeleteTransactionRepositoryFactory =
   (db) => async (transactionId) => {
     try {
-      const transactionIdNumber = parseInt(transactionId);
+      const transactionIdNumber = parseInt(transactionId, 10);
       if (isNaN(transactionIdNumber)) {
         throw new Error("Invalid transaction ID");
       }
