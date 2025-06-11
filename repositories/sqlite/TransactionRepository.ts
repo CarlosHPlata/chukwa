@@ -1,3 +1,4 @@
+import * as schema from "@/db/schema";
 import {
   CreateTransaction,
   GetTransactionByIdFromRepo,
@@ -5,11 +6,7 @@ import {
 } from "@/domain/repositories/transactionRepository";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { SQLiteDatabase } from "expo-sqlite";
-import * as schema from "@/db/schema";
-import { Transaction } from "@/domain/entities/Transaction";
-import { Builder } from "builder-pattern";
-import { Concept } from "@/domain/entities/Concept";
-import { Origin } from "@/domain/entities/Origin";
+import { mapTransactionDb } from "./TransactionMapper";
 
 type GetTransactionsByActiveMonthFactory = (
   db: SQLiteDatabase,
@@ -22,17 +19,11 @@ export const getTransactionsByActiveMonth: GetTransactionsByActiveMonthFactory =
     }
 
     return dbresponse.map((transactionDb) => {
-      return Builder<Transaction>()
-        .id(transactionDb.id.toString())
-        .date(new Date(transactionDb.date * 1000))
-        .concept(Builder<Concept>().icon(transactionDb.concept.icon).build())
-        .description(transactionDb.description)
-        .amount(transactionDb.amount)
-        .total(0)
-        .userId(["1"])
-        .origin(Builder<Origin>().icon(transactionDb.origin.icon).build())
-        .isWithdrawal(transactionDb.isWithdrawal === 1)
-        .build();
+      return mapTransactionDb(
+        transactionDb,
+        transactionDb.concept,
+        transactionDb.origin,
+      );
     });
   };
 
@@ -81,29 +72,11 @@ export const getTransactionById: GetTransactionsByIdFactory =
       }
 
       const transaction = transactionDb[0];
-      return Builder<Transaction>()
-        .id(transaction.id.toString())
-        .date(new Date(transaction.date * 1000))
-        .concept(
-          Builder<Concept>()
-            .id(transaction.concept.id.toString())
-            .name(transaction.concept.name)
-            .icon(transaction.concept.icon)
-            .build(),
-        )
-        .description(transaction.description)
-        .amount(transaction.amount)
-        .total(0)
-        .userId(["1"])
-        .origin(
-          Builder<Origin>()
-            .id(transaction.origin.id.toString())
-            .name(transaction.origin.name)
-            .icon(transaction.origin.icon)
-            .build(),
-        )
-        .isWithdrawal(transaction.isWithdrawal === 1)
-        .build();
+      return mapTransactionDb(
+        transaction,
+        transaction.concept,
+        transaction.origin,
+      );
     } catch (error) {
       console.error("Error fetching transaction by ID:", error);
       throw new Error("Failed to fetch transaction by ID");

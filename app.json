@@ -4,7 +4,7 @@
     "slug": "chukwa",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/icons/ios-light.png",
     "scheme": "chukwa",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,

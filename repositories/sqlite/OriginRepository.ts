@@ -1,8 +1,6 @@
+import * as schema from "@/db/schema";
 import { GetOrigins } from "@/domain/repositories/originRepository";
 import { drizzle } from "drizzle-orm/expo-sqlite";
-import * as schema from "@/db/schema";
-import { Builder } from "builder-pattern";
-import { Origin } from "@/domain/entities/Origin";
 import { SQLiteDatabase } from "expo-sqlite";
 
 type OriginRepositoryFactory = (db: SQLiteDatabase) => GetOrigins;
@@ -16,11 +14,9 @@ export const getOrigins: OriginRepositoryFactory = (db) => async () => {
     return [];
   }
 
-  return originsDb.map((originDb) =>
-    Builder<Origin>({
-      id: originDb.id.toString(),
-      name: originDb.name,
-      icon: originDb.icon,
-    }).build(),
-  );
+  return originsDb.map((originDb) => ({
+    id: originDb.id.toString(),
+    name: originDb.name,
+    icon: originDb.icon,
+  }));
 };
