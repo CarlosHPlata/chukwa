@@ -37,6 +37,10 @@ export const getActiveMonth: GetActiveMonthFactory = (db) => async () => {
     };
   } catch (error) {
     console.error("Error fetching active month:", error);
-    throw new Error("Failed to fetch active month");
+    const errorMessage: string =
+      typeof error === "object" && error !== null && "message" in error
+        ? (error as { message?: string }).message || "Unknown error"
+        : (error as string);
+    throw new Error("Failed to fetch active month " + errorMessage);
   }
 };

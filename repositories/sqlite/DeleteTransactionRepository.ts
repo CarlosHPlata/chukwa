@@ -1,8 +1,8 @@
-import { DeleteTransaction } from "@/domain/repositories/transactionRepository";
-import { SQLiteDatabase } from "expo-sqlite";
-import { drizzle } from "drizzle-orm/expo-sqlite";
 import * as schema from "@/db/schema";
+import { DeleteTransaction } from "@/domain/repositories/transactionRepository";
 import { eq } from "drizzle-orm";
+import { drizzle } from "drizzle-orm/expo-sqlite";
+import { SQLiteDatabase } from "expo-sqlite";
 
 type DeleteTransactionRepositoryFactory = (
   db: SQLiteDatabase,
@@ -21,6 +21,10 @@ export const deleteTransactionRepository: DeleteTransactionRepositoryFactory =
         .where(eq(schema.transactions.id, transactionIdNumber));
     } catch (error) {
       console.error("Error deleting transaction:", error);
-      throw new Error("Failed to delete transaction");
+      const errorMessage: string =
+        typeof error === "object" && error !== null && "message" in error
+          ? (error as { message?: string }).message || "Unknown error"
+          : (error as string);
+      throw new Error("Failed to delete transaction " + errorMessage);
     }
   };

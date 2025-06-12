@@ -8,7 +8,7 @@ import { ActivityIndicator } from "react-native";
 export const DATABASE_NAME = "chukwadb";
 
 export default function RootLayout() {
-  const expoDb = openDatabaseSync(DATABASE_NAME);
+  const expoDb = openDatabaseSync(DATABASE_NAME, { useNewConnection: true });
   const db = drizzle(expoDb);
   const { success, error } = useMigrations(db, migrations);
 

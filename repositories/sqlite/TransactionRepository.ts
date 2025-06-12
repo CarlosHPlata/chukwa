@@ -44,7 +44,11 @@ export const createTransaction: CreateTransactionFactory =
       });
     } catch (error) {
       console.error("Error creating transaction:", error);
-      throw new Error("Failed to create transaction");
+      const errorMessage: string =
+        typeof error === "object" && error !== null && "message" in error
+          ? (error as { message?: string }).message || "Unknown error"
+          : (error as string);
+      throw new Error("Failed to create transaction " + errorMessage);
     }
   };
 
@@ -79,7 +83,11 @@ export const getTransactionById: GetTransactionsByIdFactory =
       );
     } catch (error) {
       console.error("Error fetching transaction by ID:", error);
-      throw new Error("Failed to fetch transaction by ID");
+      const errorMessage: string =
+        typeof error === "object" && error !== null && "message" in error
+          ? (error as { message?: string }).message || "Unknown error"
+          : (error as string);
+      throw new Error("Failed to fetch transaction by ID " + errorMessage);
     }
   };
 
@@ -108,6 +116,10 @@ const queryTransactions = async (db: SQLiteDatabase, activeMonthId: number) => {
     });
   } catch (error) {
     console.error("Error fetching transactions:", error);
-    throw new Error("Failed to fetch transactions");
+    const errorMessage: string =
+      typeof error === "object" && error !== null && "message" in error
+        ? (error as { message?: string }).message || "Unknown error"
+        : (error as string);
+    throw new Error("Failed to fetch transactions - " + errorMessage);
   }
 };
