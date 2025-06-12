@@ -5,6 +5,7 @@ import { drizzle } from "drizzle-orm/expo-sqlite";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 import { useSQLiteContext } from "expo-sqlite";
 import { createContext, PropsWithChildren, useEffect } from "react";
+import ApiScreen from "./apiScreen";
 
 export type DrizzleDb = ExpoSQLiteDatabase<typeof schema>;
 export const DrizzleContext = createContext<DrizzleDb | null>(null);
@@ -22,8 +23,10 @@ export const DrizzleProvider: React.FC<PropsWithChildren> = ({ children }) => {
   }, [error, success]);
 
   return (
-    <DrizzleContext.Provider value={drizzleDb}>
-      {children}
-    </DrizzleContext.Provider>
+    <ApiScreen isLoading={!success && !error} error={error}>
+      <DrizzleContext.Provider value={drizzleDb}>
+        {children}
+      </DrizzleContext.Provider>
+    </ApiScreen>
   );
 };
