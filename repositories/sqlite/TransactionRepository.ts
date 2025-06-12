@@ -8,11 +8,11 @@ import {
 import { mapTransactionDb } from "./TransactionMapper";
 
 type GetTransactionsByActiveMonthFactory = (
-  db: DrizzleDb,
+  drizzleDb: DrizzleDb,
 ) => GetTransactionsByActiveMonth;
 export const getTransactionsByActiveMonth: GetTransactionsByActiveMonthFactory =
-  (db) => async (activeMonthId) => {
-    const dbresponse = await queryTransactions(db, activeMonthId);
+  (drizzleDb) => async (activeMonthId) => {
+    const dbresponse = await queryTransactions(drizzleDb, activeMonthId);
     if (!dbresponse || dbresponse.length === 0) {
       return [];
     }
