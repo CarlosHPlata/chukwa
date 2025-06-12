@@ -1,19 +1,18 @@
+import { DrizzleDb } from "@/components/DrizzleProvider";
 import * as schema from "@/db/schema";
 import {
   CreateTransaction,
   GetTransactionByIdFromRepo,
   GetTransactionsByActiveMonth,
 } from "@/domain/repositories/transactionRepository";
-import { drizzle } from "drizzle-orm/expo-sqlite";
-import { SQLiteDatabase } from "expo-sqlite";
 import { mapTransactionDb } from "./TransactionMapper";
 
 type GetTransactionsByActiveMonthFactory = (
-  db: SQLiteDatabase,
+  drizzleDb: DrizzleDb,
 ) => GetTransactionsByActiveMonth;
 export const getTransactionsByActiveMonth: GetTransactionsByActiveMonthFactory =
-  (db) => async (activeMonthId) => {
-    const dbresponse = await queryTransactions(db, activeMonthId);
+  (drizzleDb) => async (activeMonthId) => {
+    const dbresponse = await queryTransactions(drizzleDb, activeMonthId);
     if (!dbresponse || dbresponse.length === 0) {
       return [];
     }
@@ -27,11 +26,10 @@ export const getTransactionsByActiveMonth: GetTransactionsByActiveMonthFactory =
     });
   };
 
-type CreateTransactionFactory = (db: SQLiteDatabase) => CreateTransaction;
+type CreateTransactionFactory = (drizzleDb: DrizzleDb) => CreateTransaction;
 export const createTransaction: CreateTransactionFactory =
-  (db) => async (transaction, activeMonthId) => {
+  (drizzleDb) => async (transaction, activeMonthId) => {
     try {
-      const drizzleDb = drizzle(db, { schema });
       await drizzleDb.insert(schema.transactions).values({
         date: Math.floor(transaction.date.getTime() / 1000),
         activeMonthId: activeMonthId,
@@ -44,21 +42,24 @@ export const createTransaction: CreateTransactionFactory =
       });
     } catch (error) {
       console.error("Error creating transaction:", error);
-      throw new Error("Failed to create transaction");
+      const errorMessage: string =
+        typeof error === "object" && error !== null && "message" in error
+          ? (error as { message?: string }).message || "Unknown error"
+          : (error as string);
+      throw new Error("Failed to create transaction " + errorMessage);
     }
   };
 
 type GetTransactionsByIdFactory = (
-  db: SQLiteDatabase,
+  drizzleDb: DrizzleDb,
 ) => GetTransactionByIdFromRepo;
 export const getTransactionById: GetTransactionsByIdFactory =
-  (db) => async (id) => {
+  (drizzleDb) => async (id) => {
     try {
       if (isNaN(parseInt(id))) {
         throw new Error("Invalid transaction ID");
       }
 
-      const drizzleDb = drizzle(db, { schema });
       const transactionDb = await drizzleDb.query.transactions.findMany({
         where: (transactions, { eq }) => eq(transactions.id, parseInt(id)),
         with: {
@@ -79,13 +80,19 @@ export const getTransactionById: GetTransactionsByIdFactory =
       );
     } catch (error) {
       console.error("Error fetching transaction by ID:", error);
-      throw new Error("Failed to fetch transaction by ID");
+      const errorMessage: string =
+        typeof error === "object" && error !== null && "message" in error
+          ? (error as { message?: string }).message || "Unknown error"
+          : (error as string);
+      throw new Error("Failed to fetch transaction by ID " + errorMessage);
     }
   };
 
-const queryTransactions = async (db: SQLiteDatabase, activeMonthId: number) => {
+const queryTransactions = async (
+  drizzleDb: DrizzleDb,
+  activeMonthId: number,
+) => {
   try {
-    const drizzleDb = drizzle(db, { schema });
     return await drizzleDb.query.transactions.findMany({
       where: (transactions, { and, eq, ne }) =>
         and(
@@ -108,6 +115,10 @@ const queryTransactions = async (db: SQLiteDatabase, activeMonthId: number) => {
     });
   } catch (error) {
     console.error("Error fetching transactions:", error);
-    throw new Error("Failed to fetch transactions");
+    const errorMessage: string =
+      typeof error === "object" && error !== null && "message" in error
+        ? (error as { message?: string }).message || "Unknown error"
+        : (error as string);
+    throw new Error("Failed to fetch transactions - " + errorMessage);
   }
 };

@@ -4,7 +4,7 @@ import Error from "./error";
 
 type Props = PropsWithChildren<{
   isLoading: boolean;
-  error: string | undefined;
+  error: string | Error | undefined;
 }>;
 
 export default function ApiScreen({ isLoading, error, children }: Props) {
@@ -18,7 +18,7 @@ export default function ApiScreen({ isLoading, error, children }: Props) {
 
   if (error) {
     console.error("Error in ApiScreen:", error);
-    return <Error error={""} />;
+    return <Error error={error} />;
   }
 
   return children;

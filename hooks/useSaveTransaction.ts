@@ -1,9 +1,9 @@
 import { Transaction } from "@/domain/entities/Transaction";
+import { createTransactionService } from "@/domain/services/CreateTransactionService";
 import { createTransaction } from "@/repositories/sqlite/TransactionRepository";
-import { useSQLiteContext } from "expo-sqlite";
 import { useCallback, useState } from "react";
 import { AsyncAction } from "./AsyncResponse";
-import { createTransactionService } from "@/domain/services/CreateTransactionService";
+import { useDatabase } from "./useDatabase";
 
 export default function useSaveTransaction(): AsyncAction & {
   callback: (
@@ -11,12 +11,19 @@ export default function useSaveTransaction(): AsyncAction & {
     activeMonthId: number,
   ) => void;
 } {
-  const db = useSQLiteContext();
+  const db = useDatabase();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | undefined>();
 
   const callback = useCallback(
     (transaction: Omit<Transaction, "id">, activeMonthId: number) => {
+      if (!db) {
+        console.error("Database not initialized");
+        setError("Database not initialized");
+        return;
+      }
+
+      setError(undefined);
       setIsLoading(true);
       const createRepo = createTransaction(db);
       const service = { create: createTransactionService(createRepo) };

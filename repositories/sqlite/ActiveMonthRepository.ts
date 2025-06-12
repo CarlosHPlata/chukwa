@@ -1,14 +1,12 @@
+import { DrizzleDb } from "@/components/DrizzleProvider";
 import * as schema from "@/db/schema";
 import { SAVE_DATE_FORMAT } from "@/domain/constants";
 import { GetActiveMonth } from "@/domain/repositories/activeRepository";
-import { drizzle } from "drizzle-orm/expo-sqlite";
-import { SQLiteDatabase } from "expo-sqlite";
 import { DateTime } from "luxon";
 
-type GetActiveMonthFactory = (db: SQLiteDatabase) => GetActiveMonth;
-export const getActiveMonth: GetActiveMonthFactory = (db) => async () => {
+type GetActiveMonthFactory = (drizzleDb: DrizzleDb) => GetActiveMonth;
+export const getActiveMonth: GetActiveMonthFactory = (drizzleDb) => async () => {
   try {
-    const drizzleDb = drizzle(db, { schema });
     let result = await drizzleDb.query.activeMonths.findFirst({
       orderBy: (activeMonths, { desc }) => desc(activeMonths.id),
     });
@@ -37,6 +35,10 @@ export const getActiveMonth: GetActiveMonthFactory = (db) => async () => {
     };
   } catch (error) {
     console.error("Error fetching active month:", error);
-    throw new Error("Failed to fetch active month");
+    const errorMessage: string =
+      typeof error === "object" && error !== null && "message" in error
+        ? (error as { message?: string }).message || "Unknown error"
+        : (error as string);
+    throw new Error("Failed to fetch active month " + errorMessage);
   }
 };

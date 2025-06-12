@@ -9,6 +9,9 @@ export default function useAsyncValues<T>(
   const [error, setError] = useState<string | undefined>();
 
   useEffect(() => {
+    setIsLoading(true);
+    setError(undefined);
+
     asyncCallback()
       .then((data) => {
         setData(data);

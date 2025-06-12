@@ -1,11 +1,8 @@
-import * as schema from "@/db/schema";
+import { DrizzleDb } from "@/components/DrizzleProvider";
 import { GetConcepts } from "@/domain/repositories/conceptRepository";
-import { drizzle } from "drizzle-orm/expo-sqlite";
-import { SQLiteDatabase } from "expo-sqlite";
 
-type GetConceptsFactory = (db: SQLiteDatabase) => GetConcepts;
-export const getConcepts: GetConceptsFactory = (db) => async () => {
-  const drizzleDb = drizzle(db, { schema });
+type GetConceptsFactory = (drizzleDb: DrizzleDb) => GetConcepts;
+export const getConcepts: GetConceptsFactory = (drizzleDb) => async () => {
   const conceptsDb = await drizzleDb.query.concepts.findMany({
     where: (concepts, { ne }) => ne(concepts.deleted, 1),
   });
