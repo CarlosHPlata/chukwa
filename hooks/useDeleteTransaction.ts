@@ -1,17 +1,21 @@
 import { deleteTransactionRepository } from "@/repositories/sqlite/DeleteTransactionRepository";
-import { useSQLiteContext } from "expo-sqlite";
-import { AsyncAction } from "./AsyncResponse";
 import { useCallback, useState } from "react";
+import { AsyncAction } from "./AsyncResponse";
+import { useDatabase } from "./useDatabase";
 
 export default function useDeleteTransaction(): AsyncAction & {
   callback: (transactionId: string) => void;
 } {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | undefined>();
-  const db = useSQLiteContext();
+  const db = useDatabase();
 
   const callback = useCallback(
     (transactionId: string) => {
+      if (!db) {
+        return Promise.reject(new Error("Database not initialized"));
+      }
+
       const deleteTransaction = deleteTransactionRepository(db);
       setIsLoading(true);
       deleteTransaction(transactionId)
@@ -30,6 +34,6 @@ export default function useDeleteTransaction(): AsyncAction & {
   return {
     isLoading,
     error,
-    callback
+    callback,
   };
 }

@@ -1,20 +1,18 @@
+import { DrizzleDb } from "@/components/DrizzleProvider";
 import * as schema from "@/db/schema";
 import { DeleteTransaction } from "@/domain/repositories/transactionRepository";
 import { eq } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/expo-sqlite";
-import { SQLiteDatabase } from "expo-sqlite";
 
 type DeleteTransactionRepositoryFactory = (
-  db: SQLiteDatabase,
+  drizzleDb: DrizzleDb,
 ) => DeleteTransaction;
 export const deleteTransactionRepository: DeleteTransactionRepositoryFactory =
-  (db) => async (transactionId) => {
+  (drizzleDb) => async (transactionId) => {
     try {
       const transactionIdNumber = parseInt(transactionId, 10);
       if (isNaN(transactionIdNumber)) {
         throw new Error("Invalid transaction ID");
       }
-      const drizzleDb = drizzle(db, { schema });
       await drizzleDb
         .update(schema.transactions)
         .set({ deleted: 1 })

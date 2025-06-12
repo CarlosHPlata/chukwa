@@ -1,15 +1,14 @@
+import { DrizzleDb } from "@/components/DrizzleProvider";
 import * as schema from "@/db/schema";
 import {
   CreateTransaction,
   GetTransactionByIdFromRepo,
   GetTransactionsByActiveMonth,
 } from "@/domain/repositories/transactionRepository";
-import { drizzle } from "drizzle-orm/expo-sqlite";
-import { SQLiteDatabase } from "expo-sqlite";
 import { mapTransactionDb } from "./TransactionMapper";
 
 type GetTransactionsByActiveMonthFactory = (
-  db: SQLiteDatabase,
+  db: DrizzleDb,
 ) => GetTransactionsByActiveMonth;
 export const getTransactionsByActiveMonth: GetTransactionsByActiveMonthFactory =
   (db) => async (activeMonthId) => {
@@ -27,11 +26,10 @@ export const getTransactionsByActiveMonth: GetTransactionsByActiveMonthFactory =
     });
   };
 
-type CreateTransactionFactory = (db: SQLiteDatabase) => CreateTransaction;
+type CreateTransactionFactory = (drizzleDb: DrizzleDb) => CreateTransaction;
 export const createTransaction: CreateTransactionFactory =
-  (db) => async (transaction, activeMonthId) => {
+  (drizzleDb) => async (transaction, activeMonthId) => {
     try {
-      const drizzleDb = drizzle(db, { schema });
       await drizzleDb.insert(schema.transactions).values({
         date: Math.floor(transaction.date.getTime() / 1000),
         activeMonthId: activeMonthId,
@@ -53,16 +51,15 @@ export const createTransaction: CreateTransactionFactory =
   };
 
 type GetTransactionsByIdFactory = (
-  db: SQLiteDatabase,
+  drizzleDb: DrizzleDb,
 ) => GetTransactionByIdFromRepo;
 export const getTransactionById: GetTransactionsByIdFactory =
-  (db) => async (id) => {
+  (drizzleDb) => async (id) => {
     try {
       if (isNaN(parseInt(id))) {
         throw new Error("Invalid transaction ID");
       }
 
-      const drizzleDb = drizzle(db, { schema });
       const transactionDb = await drizzleDb.query.transactions.findMany({
         where: (transactions, { eq }) => eq(transactions.id, parseInt(id)),
         with: {
@@ -91,9 +88,11 @@ export const getTransactionById: GetTransactionsByIdFactory =
     }
   };
 
-const queryTransactions = async (db: SQLiteDatabase, activeMonthId: number) => {
+const queryTransactions = async (
+  drizzleDb: DrizzleDb,
+  activeMonthId: number,
+) => {
   try {
-    const drizzleDb = drizzle(db, { schema });
     return await drizzleDb.query.transactions.findMany({
       where: (transactions, { and, eq, ne }) =>
         and(
