@@ -30,15 +30,26 @@ type CreateTransactionFactory = (drizzleDb: DrizzleDb) => CreateTransaction;
 export const createTransaction: CreateTransactionFactory =
   (drizzleDb) => async (transaction, activeMonthId) => {
     try {
+      if (transaction.concept.id == null || transaction.origin.id == null) {
+        throw new Error("Concept and origin IDs must be provided");
+      }
+
+      const conceptId = parseInt(transaction.concept.id);
+      const originId = parseInt(transaction.origin.id);
+
+      if (isNaN(conceptId) || isNaN(originId)) {
+        throw new Error("Invalid concept or origin ID");
+      }
+
       await drizzleDb.insert(schema.transactions).values({
         date: Math.floor(transaction.date.getTime() / 1000),
         activeMonthId: activeMonthId,
-        conceptId: parseInt(transaction.concept.id),
+        conceptId,
         description: transaction.description,
         amount: transaction.amount,
         isWithdrawal: transaction.isWithdrawal ? 1 : 0,
-        originId: parseInt(transaction.origin.id),
-        destinationId: parseInt(transaction.origin.id),
+        originId,
+        destinationId: originId, // Assuming destinationId is the same as originId
       });
     } catch (error) {
       console.error("Error creating transaction:", error);

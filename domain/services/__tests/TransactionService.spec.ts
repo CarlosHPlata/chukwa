@@ -1,6 +1,7 @@
-import { GetActiveMonth } from "../repositories/activeRepository";
-import { GetTransactionsByActiveMonth } from "../repositories/transactionRepository";
-import { getActiveTransactions } from "./TransactionService";
+import { Transaction } from "../../entities/Transaction";
+import { GetActiveMonth } from "../../repositories/activeRepository";
+import { GetTransactionsByActiveMonth } from "../../repositories/transactionRepository";
+import { getActiveTransactions } from "../TransactionService";
 
 describe("TransactionService", () => {
   const getTransactionsRepoMock: GetTransactionsByActiveMonth = jest.fn();
@@ -17,14 +18,13 @@ describe("TransactionService", () => {
   describe("getActiveTransactions", () => {
     it("should return transactions from an active month", async () => {
       const mockActiveMonth = { id: 1, total: 300, startDate: "" };
-      const mockTransactions = [
+      const mockTransactions: Transaction[] = [
         {
           id: "1",
           date: new Date(),
           concept: { icon: "icon1" },
           description: "Test Transaction 1",
           amount: 100,
-          total: 100,
           userId: ["1"],
           origin: { icon: "originIcon1" },
           isWithdrawal: false,
@@ -35,7 +35,6 @@ describe("TransactionService", () => {
           concept: { icon: "icon2" },
           description: "Test Transaction 2",
           amount: 200,
-          total: 200,
           userId: ["1"],
           origin: { icon: "originIcon2" },
           isWithdrawal: true,
@@ -54,14 +53,13 @@ describe("TransactionService", () => {
 
     it("Based on the active month total, it should calculate the total for transactions", async () => {
       const mockActiveMonth = { id: 1, total: 300, startDate: "" };
-      const mockTransactions = [
+      const mockTransactions: Transaction[] = [
         {
           id: "1",
           date: new Date(),
           concept: { icon: "icon1" },
           description: "Test Transaction 1",
           amount: 100,
-          total: 0,
           userId: ["1"],
           origin: { icon: "originIcon1" },
           isWithdrawal: false,
@@ -72,7 +70,6 @@ describe("TransactionService", () => {
           concept: { icon: "icon2" },
           description: "Test Transaction 2",
           amount: 200,
-          total: 0,
           userId: ["1"],
           origin: { icon: "originIcon2" },
           isWithdrawal: true,

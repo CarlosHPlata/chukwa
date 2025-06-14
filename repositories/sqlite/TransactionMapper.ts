@@ -16,7 +16,6 @@ export const mapTransactionDb = (
     },
     description: transaction.description,
     amount: transaction.amount,
-    total: 0,
     userId: ["1"],
     origin: {
       id: origin.id ? origin.id.toString() : "",

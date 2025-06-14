@@ -1,4 +1,4 @@
-import { Transaction } from "@/domain/entities/Transaction";
+import { NotSavedTransaction } from "@/domain/entities/Transaction";
 import { createTransactionService } from "@/domain/services/CreateTransactionService";
 import { createTransaction } from "@/repositories/sqlite/TransactionRepository";
 import { useCallback, useState } from "react";
@@ -6,17 +6,14 @@ import { AsyncAction } from "./AsyncResponse";
 import { useDatabase } from "./useDatabase";
 
 export default function useSaveTransaction(): AsyncAction & {
-  callback: (
-    transaction: Omit<Transaction, "id">,
-    activeMonthId: number,
-  ) => void;
+  callback: (transaction: NotSavedTransaction, activeMonthId: number) => void;
 } {
   const db = useDatabase();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | undefined>();
 
   const callback = useCallback(
-    (transaction: Omit<Transaction, "id">, activeMonthId: number) => {
+    (transaction: NotSavedTransaction, activeMonthId: number) => {
       if (!db) {
         console.error("Database not initialized");
         setError("Database not initialized");

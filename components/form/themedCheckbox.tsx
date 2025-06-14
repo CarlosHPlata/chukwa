@@ -11,6 +11,7 @@ export default function ThemedCheckbox({ label, value, onValueChange }: Props) {
   return (
     <View style={styles.container}>
       <Checkbox
+        testID="themed-checkbox:Checkbox"
         style={styles.checkbox}
         value={value}
         onValueChange={onValueChange}

@@ -6,7 +6,7 @@ type Props = {
 };
 
 export default function Error({ error }: Props) {
-  console.log("Error:", typeof error, error);
+  console.error("Error:", typeof error, error);
   const errorMessage: string =
     typeof error === "object" && error !== null && "message" in error
       ? (error as { message?: string }).message || "Unknown error"

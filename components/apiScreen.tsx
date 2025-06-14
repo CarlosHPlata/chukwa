@@ -11,7 +11,7 @@ export default function ApiScreen({ isLoading, error, children }: Props) {
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator />
+        <ActivityIndicator testID="api-screen:activity-indicator" />
       </View>
     );
   }
