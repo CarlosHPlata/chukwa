@@ -22,6 +22,7 @@ export default function ThemedPicker({
       <Text>{label}</Text>
 
         <Picker
+          testID="themed-picker:Picker"
           selectedValue={value}
           onValueChange={onValueChange}
           style={{ marginBottom: 16 }}

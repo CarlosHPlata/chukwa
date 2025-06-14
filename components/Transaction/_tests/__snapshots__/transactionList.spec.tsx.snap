@@ -1,0 +1,285 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TransactionList renders correctly with transactions 1`] = `
+<RCTScrollView
+  data={
+    [
+      {
+        "amount": 100,
+        "concept": {
+          "icon": "payment",
+          "id": "1",
+          "name": "Payment",
+        },
+        "date": 2023-10-01T12:00:00.000Z,
+        "description": "Test Transaction 1",
+        "id": "1",
+        "isWithdrawal": false,
+        "origin": {
+          "icon": "payment",
+          "id": "1",
+          "name": "balance",
+        },
+        "total": 150,
+        "userId": [
+          "1",
+        ],
+      },
+      {
+        "amount": 200,
+        "concept": {
+          "icon": "payment",
+          "id": "2",
+          "name": "Withdrawal",
+        },
+        "date": 2023-10-02T12:00:00.000Z,
+        "description": "Test Transaction 2",
+        "id": "2",
+        "isWithdrawal": true,
+        "origin": {
+          "icon": "payment",
+          "id": "2",
+          "name": "bank",
+        },
+        "total": 250,
+        "userId": [
+          "1",
+        ],
+      },
+    ]
+  }
+  getItem={[Function]}
+  getItemCount={[Function]}
+  keyExtractor={[Function]}
+  onContentSizeChange={[Function]}
+  onLayout={[Function]}
+  onMomentumScrollBegin={[Function]}
+  onMomentumScrollEnd={[Function]}
+  onScroll={[Function]}
+  onScrollBeginDrag={[Function]}
+  onScrollEndDrag={[Function]}
+  removeClippedSubviews={false}
+  renderItem={[Function]}
+  scrollEventThrottle={0.0001}
+  stickyHeaderIndices={[]}
+  style={
+    {
+      "backgroundColor": "lightgray",
+      "flexGrow": 1,
+      "width": "100%",
+    }
+  }
+  viewabilityConfigCallbackPairs={[]}
+>
+  <View>
+    <View
+      onFocusCapture={[Function]}
+      onLayout={[Function]}
+      style={null}
+    >
+      <View
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          {
+            "backgroundColor": "white",
+            "borderRadius": 8,
+            "margin": 5,
+            "padding": 10,
+          }
+        }
+        testID="transaction-item:pressable"
+      >
+        <View>
+          <View
+            style={
+              {
+                "alignItems": "center",
+                "flexDirection": "row",
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "flex": 1,
+                  "fontSize": 16,
+                  "fontWeight": "bold",
+                }
+              }
+            >
+              Test Transaction 1
+            </Text>
+            <MaterialIcons
+              data-icon="payment"
+              size={16}
+            />
+            <MaterialIcons
+              data-icon="payment"
+              size={16}
+            />
+          </View>
+          <View
+            style={
+              {
+                "alignItems": "center",
+                "flexDirection": "row",
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "color": "green",
+                  "flex": 1,
+                }
+              }
+            >
+              +
+              0,10 €
+            </Text>
+            <Text
+              style={
+                {
+                  "color": "gray",
+                  "fontSize": 12,
+                }
+              }
+            >
+              0,15 €
+            </Text>
+          </View>
+          <Text
+            style={
+              {
+                "color": "gray",
+              }
+            }
+          >
+            01-10-2023 14:00
+          </Text>
+        </View>
+      </View>
+    </View>
+    <View
+      onFocusCapture={[Function]}
+      onLayout={[Function]}
+      style={null}
+    >
+      <View
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          {
+            "backgroundColor": "white",
+            "borderRadius": 8,
+            "margin": 5,
+            "padding": 10,
+          }
+        }
+        testID="transaction-item:pressable"
+      >
+        <View>
+          <View
+            style={
+              {
+                "alignItems": "center",
+                "flexDirection": "row",
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "flex": 1,
+                  "fontSize": 16,
+                  "fontWeight": "bold",
+                }
+              }
+            >
+              Test Transaction 2
+            </Text>
+            <MaterialIcons
+              data-icon="payment"
+              size={16}
+            />
+            <MaterialIcons
+              data-icon="payment"
+              size={16}
+            />
+          </View>
+          <View
+            style={
+              {
+                "alignItems": "center",
+                "flexDirection": "row",
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "color": "red",
+                  "flex": 1,
+                }
+              }
+            >
+              -
+              0,20 €
+            </Text>
+            <Text
+              style={
+                {
+                  "color": "gray",
+                  "fontSize": 12,
+                }
+              }
+            >
+              0,25 €
+            </Text>
+          </View>
+          <Text
+            style={
+              {
+                "color": "gray",
+              }
+            }
+          >
+            02-10-2023 14:00
+          </Text>
+        </View>
+      </View>
+    </View>
+  </View>
+</RCTScrollView>
+`;

@@ -1,11 +1,12 @@
+import { PresentTransactionAggregate } from "@/domain/aggregates/ActiveTransactionsAggregate";
 import { Transaction } from "@/domain/entities/Transaction";
 import useFormattedCurrency from "@/hooks/useFormattedCurrency";
-import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 import useFormattedDate from "@/hooks/useFormattedDate";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 
 type Props = {
-  transaction: Transaction;
+  transaction: PresentTransactionAggregate;
   onPress: (transaction: Transaction) => void;
 };
 
@@ -16,6 +17,7 @@ export default function TransactionItem({ transaction, onPress }: Props) {
 
   return (
     <TouchableHighlight
+      testID="transaction-item:pressable"
       key={transaction.id}
       onPress={() => onPress(transaction)}
       style={styles.transactionContainer}

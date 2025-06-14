@@ -1,22 +1,22 @@
 import { CURRENCY_PRECISION } from "../constants";
-import { Transaction } from "../entities/Transaction";
+import { NotSavedTransaction } from "../entities/Transaction";
 import { CreateTransaction } from "../repositories/transactionRepository";
 
 export type CreateTransactionService = (
-  transaction: Omit<Transaction, "id">,
+  transaction: NotSavedTransaction,
   activeMonthId: number,
 ) => Promise<void>;
 
 export const createTransactionService =
   (createRepo: CreateTransaction): CreateTransactionService =>
-  async (transaction: Omit<Transaction, "id">, activeMonthId: number) => {
-    if (!transaction.date) {
-      transaction.date = new Date();
-    }
-    transaction.amount = toFixedInt(transaction.amount, CURRENCY_PRECISION);
-    validateTransaction(transaction);
-    return createRepo(transaction, activeMonthId);
-  };
+    async (transaction: NotSavedTransaction, activeMonthId: number) => {
+      if (!transaction.date) {
+        transaction.date = new Date();
+      }
+      transaction.amount = toFixedInt(transaction.amount, CURRENCY_PRECISION);
+      validateTransaction(transaction);
+      return createRepo(transaction, activeMonthId);
+    };
 
 const toFixedInt = (value: number, precision: number): number => {
   const result = value * precision;
@@ -26,7 +26,7 @@ const toFixedInt = (value: number, precision: number): number => {
   return result;
 };
 
-const validateTransaction = (transaction: Omit<Transaction, "id">) => {
+const validateTransaction = (transaction: NotSavedTransaction) => {
   if (isNaN(transaction.amount) || transaction.amount <= 0) {
     throw new Error("Amount cannot be negative");
   }

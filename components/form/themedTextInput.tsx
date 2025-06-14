@@ -19,6 +19,7 @@ export default function ThemedTextInput({
     <>
       <Text>{label}</Text>
       <TextInput
+        testID="themed-text-input:TextInput"
         style={{ borderWidth: 1, marginBottom: 16, padding: 8 }}
         keyboardType={keyboardType}
         placeholder={label}

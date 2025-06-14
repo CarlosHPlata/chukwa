@@ -1,4 +1,4 @@
-import { ActiveTransactionsAggregate } from "../aggregates/ActiveTransactionsAggregate";
+import { ActiveTransactionsAggregate, PresentTransactionAggregate } from "../aggregates/ActiveTransactionsAggregate";
 import { ActiveMonth } from "../entities/ActiveMonth";
 import { Transaction } from "../entities/Transaction";
 import { GetActiveMonth } from "../repositories/activeRepository";
@@ -9,54 +9,52 @@ export const getActiveTransactions =
     getTransactionsFromRepo: GetTransactionsByActiveMonth,
     getActiveMonth: GetActiveMonth,
   ) =>
-  async (): Promise<ActiveTransactionsAggregate> => {
-    try {
-      const activeMonth: ActiveMonth = await getActiveMonth();
-      if (!activeMonth) {
-        return {
-          transactions: [],
-          currentTotal: 0,
-          startingTotal: 0,
-          activeMonthId: 0,
-        };
-      }
+    async (): Promise<ActiveTransactionsAggregate> => getTransactions(getTransactionsFromRepo, getActiveMonth);
 
-      const rawTransactions: Transaction[] = await getTransactionsFromRepo(
-        activeMonth.id,
-      );
+const getTransactions = async (getTransactionsFromRepo: GetTransactionsByActiveMonth, getActiveMonth: GetActiveMonth,): Promise<ActiveTransactionsAggregate> => {
+  const activeMonth: ActiveMonth = await getActiveMonth();
+  if (!activeMonth) {
+    return {
+      transactions: [],
+      currentTotal: 0,
+      startingTotal: 0,
+      activeMonthId: 0,
+    };
+  }
 
-      if (rawTransactions.length === 0) {
-        return {
-          transactions: [],
-          currentTotal: activeMonth.total,
-          startingTotal: activeMonth.total,
-          activeMonthId: activeMonth.id,
-        };
-      }
+  const rawTransactions: Transaction[] = await getTransactionsFromRepo(
+    activeMonth.id,
+  );
+  if (rawTransactions.length === 0) {
+    return {
+      transactions: [],
+      currentTotal: activeMonth.total,
+      startingTotal: activeMonth.total,
+      activeMonthId: activeMonth.id,
+    };
+  }
 
-      const transactions = calculateTotalForTransactions(
-        activeMonth.total,
-        rawTransactions,
-      );
+  const transactions: PresentTransactionAggregate[] = calculateTotalForTransactions(
+    activeMonth.total,
+    rawTransactions,
+  );
 
-      const lastTransaction = transactions[0];
-      return {
-        transactions,
-        currentTotal: lastTransaction.total,
-        startingTotal: activeMonth.total,
-        activeMonthId: activeMonth.id,
-      };
-    } catch (error) {
-      throw error;
-    }
+  const lastTransaction = transactions[0];
+  return {
+    transactions,
+    currentTotal: lastTransaction.total,
+    startingTotal: activeMonth.total,
+    activeMonthId: activeMonth.id,
   };
+}
 
 const calculateTotalForTransactions = (
   total: number,
   transactions: Transaction[],
 ) => {
-  for (let i = transactions.length - 1; i >= 0; i--) {
-    const transaction = transactions[i];
+  const pTransactions = transactions.map((t) => ({ ...t, total: 0 }));
+  for (let i = pTransactions.length - 1; i >= 0; i--) {
+    const transaction = pTransactions[i];
     if (transaction.isWithdrawal) {
       total = total - transaction.amount;
     } else {
@@ -65,5 +63,5 @@ const calculateTotalForTransactions = (
     transaction.total = total;
   }
 
-  return transactions;
+  return pTransactions;
 };

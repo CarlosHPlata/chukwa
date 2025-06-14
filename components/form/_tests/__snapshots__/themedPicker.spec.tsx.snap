@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ThemedCheckbox should render the piicker correctly 1`] = `
+[
+  <Text>
+    Select Option
+  </Text>,
+  <View
+    style={
+      {
+        "marginBottom": 16,
+      }
+    }
+  >
+    <RNCPicker
+      items={
+        [
+          {
+            "label": "Option 1",
+            "testID": undefined,
+            "textColor": undefined,
+            "value": "option1",
+          },
+          {
+            "label": "Option 2",
+            "testID": undefined,
+            "textColor": undefined,
+            "value": "option2",
+          },
+        ]
+      }
+      numberOfLines={1}
+      onChange={[Function]}
+      selectedIndex={0}
+      style={
+        [
+          {
+            "height": 216,
+          },
+          undefined,
+        ]
+      }
+      testID="themed-picker:Picker"
+    />
+  </View>,
+]
+`;

@@ -1,10 +1,11 @@
+import { PresentTransactionAggregate } from "@/domain/aggregates/ActiveTransactionsAggregate";
 import { Transaction } from "@/domain/entities/Transaction";
 import { router } from "expo-router";
 import { FlatList } from "react-native";
 import TransactionItem from "./TransactionItem";
 
 type Props = {
-  transactions: Transaction[];
+  transactions: PresentTransactionAggregate[];
 };
 export default function TransactionList({ transactions }: Props) {
   const onItemPressed = (transaction: Transaction) => {

@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ThemedTextInput renders correctly 1`] = `
+[
+  <Text>
+    Test Input
+  </Text>,
+  <TextInput
+    inputMode="text"
+    keyboardType="default"
+    onChangeText={[Function]}
+    placeholder="Test Input"
+    style={
+      {
+        "borderWidth": 1,
+        "marginBottom": 16,
+        "padding": 8,
+      }
+    }
+    testID="themed-text-input:TextInput"
+    value=""
+  />,
+]
+`;

@@ -3,7 +3,7 @@ import { Pressable, Text, View } from "react-native";
 type Props = {
   onPress: () => void;
   label: string;
-}
+};
 
 export default function ThemedButton({ onPress, label }: Props) {
   return (
@@ -14,6 +14,7 @@ export default function ThemedButton({ onPress, label }: Props) {
       }}
     >
       <Pressable
+        testID="themed-button:Pressable"
         onPress={onPress}
         style={({ pressed }) => [
           {
@@ -26,7 +27,9 @@ export default function ThemedButton({ onPress, label }: Props) {
           },
         ]}
       >
-        <Text style={{ color: "#fff" }}>{label}</Text>
+        <Text testID="themed-button:Label" style={{ color: "#fff" }}>
+          {label}
+        </Text>
       </Pressable>
     </View>
   );
