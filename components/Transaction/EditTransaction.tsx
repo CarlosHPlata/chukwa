@@ -28,7 +28,7 @@ type Props = {
 };
 
 export default function EditTransaction({
-  initialValue = defaultTransaction,
+  initialValue = { ...defaultTransaction, date: new Date() },
   concepts,
   origins,
   onSave = () => {},
