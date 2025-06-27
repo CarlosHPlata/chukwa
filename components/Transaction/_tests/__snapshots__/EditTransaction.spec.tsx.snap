@@ -154,7 +154,7 @@ exports[`EditTransaction renders correctly with initial values 1`] = `
       onStartShouldSetResponder={[Function]}
     >
       <Text>
-        14-06-2025
+        01-10-2023
       </Text>
     </View>
     <View
