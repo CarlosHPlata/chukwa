@@ -24,6 +24,14 @@ export default function RootLayout() {
               name="transaction/[id]"
               options={{ headerTitle: "Transaction" }}
             />
+            <Stack.Screen
+              name="period/overview/[id]"
+              options={{ headerTitle: "Period Overview" }}
+            />
+            <Stack.Screen
+              name="period/overview/new"
+              options={{ headerTitle: "Let's start again" }}
+            />
           </Stack>
         </DrizzleProvider>
       </SQLiteProvider>

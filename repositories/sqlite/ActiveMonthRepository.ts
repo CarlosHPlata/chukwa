@@ -1,44 +1,87 @@
 import { DrizzleDb } from "@/components/DrizzleProvider";
 import * as schema from "@/db/schema";
-import { SAVE_DATE_FORMAT } from "@/domain/constants";
-import { GetActiveMonth } from "@/domain/repositories/activeRepository";
-import { DateTime } from "luxon";
+import { ActiveMonth } from "@/domain/entities/ActiveMonth";
+import {
+  AddNewPeriod,
+  GetActiveMonth,
+  GetPeriodById,
+} from "@/domain/repositories/activeRepository";
+import { todayDateString } from "@/domain/utils/date";
 
 type GetActiveMonthFactory = (drizzleDb: DrizzleDb) => GetActiveMonth;
-export const getActiveMonth: GetActiveMonthFactory = (drizzleDb) => async () => {
-  try {
-    let result = await drizzleDb.query.activeMonths.findFirst({
-      orderBy: (activeMonths, { desc }) => desc(activeMonths.id),
-    });
+export const getActiveMonth: GetActiveMonthFactory =
+  (drizzleDb) => async () => {
+    try {
+      let result = await drizzleDb.query.activeMonths.findFirst({
+        orderBy: (activeMonths, { desc }) => desc(activeMonths.id),
+      });
 
-    if (!result) {
-      const firstMonth = {
-        total: 0,
-        startDate: DateTime.fromJSDate(new Date()).toFormat(SAVE_DATE_FORMAT),
-      };
-      let inserted = await drizzleDb
-        .insert(schema.activeMonths)
-        .values(firstMonth)
-        .returning();
+      if (!result) {
+        const firstMonth = {
+          total: 0,
+          startDate: todayDateString(),
+        };
 
-      return {
-        id: inserted[0].id,
-        total: firstMonth.total,
-        startDate: firstMonth.startDate,
-      };
+        return addNewPeriod(drizzleDb)(firstMonth);
+      }
+
+      return parseActiveMonth(result);
+    } catch (error) {
+      console.error("Error fetching active month:", error);
+      const errorMessage: string =
+        typeof error === "object" && error !== null && "message" in error
+          ? (error as { message?: string }).message || "Unknown error"
+          : (error as string);
+      throw new Error("Failed to fetch active month " + errorMessage);
+    }
+  };
+
+export const addNewPeriod =
+  (drizzleDb: DrizzleDb): AddNewPeriod =>
+  async (period: Omit<ActiveMonth, "id">) => {
+    let inserted = await drizzleDb
+      .insert(schema.activeMonths)
+      .values(period)
+      .returning();
+
+    if (inserted.length === 0) {
+      throw new Error("Failed to insert new period");
     }
 
     return {
-      id: result.id,
-      total: result.total,
-      startDate: result.startDate,
+      id: inserted[0].id,
+      total: period.total,
+      startDate: period.startDate,
     };
-  } catch (error) {
-    console.error("Error fetching active month:", error);
-    const errorMessage: string =
-      typeof error === "object" && error !== null && "message" in error
-        ? (error as { message?: string }).message || "Unknown error"
-        : (error as string);
-    throw new Error("Failed to fetch active month " + errorMessage);
-  }
+  };
+
+export const getPeriodById =
+  (drizzleDb: DrizzleDb): GetPeriodById =>
+  async (periodId: number) => {
+    try {
+      let result = await drizzleDb.query.activeMonths.findFirst({
+        where: (activeMonths, { eq }) => eq(activeMonths.id, periodId),
+      });
+
+      if (!result) {
+        throw new Error(`Period with ID ${periodId} not found`);
+      }
+
+      return parseActiveMonth(result);
+    } catch (error) {
+      console.error("Error fetching period by ID:", error);
+      const errorMessage: string =
+        typeof error === "object" && error !== null && "message" in error
+          ? (error as { message?: string }).message || "Unknown error"
+          : (error as string);
+      throw new Error("Failed to fetch period by ID " + errorMessage);
+    }
+  };
+
+const parseActiveMonth = (activeMonth: schema.ActiveMonthDb): ActiveMonth => {
+  return {
+    id: activeMonth.id,
+    total: activeMonth.total,
+    startDate: activeMonth.startDate,
+  };
 };

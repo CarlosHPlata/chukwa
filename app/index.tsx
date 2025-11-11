@@ -1,18 +1,16 @@
 import ApiScreen from "@/components/apiScreen";
+import Total from "@/components/total";
 import TransactionList from "@/components/Transaction/TransactionList";
 import useActiveTransactions from "@/hooks/useActiveTransactions";
-import useFormattedCurrency from "@/hooks/useFormattedCurrency";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Link, useGlobalSearchParams } from "expo-router";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 
 export default function Index() {
   const { refresh } = useGlobalSearchParams();
   const { data, isLoading, error } = useActiveTransactions(
     parseInt(refresh as string) ?? 0,
   );
-  const formattedStartingTotal = useFormattedCurrency(data?.startingTotal || 0);
-  const formattedCurrentTotal = useFormattedCurrency(data?.currentTotal || 0);
 
   return (
     <ApiScreen isLoading={isLoading} error={error}>
@@ -23,27 +21,11 @@ export default function Index() {
           marginTop: 50,
         }}
       >
-        <View
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            padding: 10,
-          }}
-        >
-          <Text style={{ fontSize: 10, color: "grey" }}>
-            {formattedStartingTotal}
-          </Text>
-          <Text
-            style={{
-              fontSize: 50,
-              marginTop: -10,
-              paddingTop: 0,
-              color: "green",
-            }}
-          >
-            {formattedCurrentTotal}
-          </Text>
-        </View>
+        <Total
+          total={data?.currentTotal || 0}
+          startingTotal={data?.startingTotal || 0}
+          currentPeriodId={data?.activeMonthId || 0}
+        />
         <TransactionList transactions={data?.transactions || []} />
         <View
           style={{
