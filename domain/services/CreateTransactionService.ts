@@ -1,4 +1,4 @@
-import { CURRENCY_PRECISION } from "../constants";
+import { toFixedInt } from "../utils/currency";
 import { NotSavedTransaction } from "../entities/Transaction";
 import { CreateTransaction } from "../repositories/transactionRepository";
 
@@ -13,18 +13,10 @@ export const createTransactionService =
       if (!transaction.date) {
         transaction.date = new Date();
       }
-      transaction.amount = toFixedInt(transaction.amount, CURRENCY_PRECISION);
+      transaction.amount = toFixedInt(transaction.amount);
       validateTransaction(transaction);
       return createRepo(transaction, activeMonthId);
     };
-
-const toFixedInt = (value: number, precision: number): number => {
-  const result = value * precision;
-  if (!Number.isInteger(result)) {
-    throw new Error(`Non-integer result: ${result}`);
-  }
-  return result;
-};
 
 const validateTransaction = (transaction: NotSavedTransaction) => {
   if (isNaN(transaction.amount) || transaction.amount <= 0) {

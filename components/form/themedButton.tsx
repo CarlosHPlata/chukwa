@@ -1,11 +1,12 @@
+import { PropsWithChildren } from "react";
 import { Pressable, Text, View } from "react-native";
 
-type Props = {
+type Props = PropsWithChildren<{
   onPress: () => void;
-  label: string;
-};
+  label?: string;
+}>;
 
-export default function ThemedButton({ onPress, label }: Props) {
+export default function ThemedButton({ children, onPress, label }: Props) {
   return (
     <View
       style={{
@@ -28,7 +29,7 @@ export default function ThemedButton({ onPress, label }: Props) {
         ]}
       >
         <Text testID="themed-button:Label" style={{ color: "#fff" }}>
-          {label}
+          {children || label}
         </Text>
       </Pressable>
     </View>

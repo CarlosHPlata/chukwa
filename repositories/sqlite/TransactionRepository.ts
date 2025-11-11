@@ -114,7 +114,9 @@ const queryTransactions = async (
       with: {
         concept: {
           columns: {
+            id: true,
             icon: true,
+            name: true,
           },
         },
         origin: {

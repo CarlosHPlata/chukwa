@@ -1,7 +1,7 @@
 import { NotSavedTransaction } from "@/domain/entities/Transaction";
 import { render } from "@testing-library/react-native";
-import EditTransaction from "../EditTransaction";
 import { DateTime } from "luxon";
+import EditTransaction from "../EditTransaction";
 
 describe("EditTransaction", () => {
   it("renders correctly with initial values", () => {
